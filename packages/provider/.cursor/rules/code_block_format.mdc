@@ -1,0 +1,271 @@
+---
+alwaysApply: true
+---
+# Code Block Format with Line Numbers and File Paths
+
+## Description
+
+This rule defines the standard format for code blocks that reference existing code in the codebase with line numbers and file paths. This format enables proper syntax highlighting while maintaining clear references to source code locations.
+
+## Format Specification
+
+When referencing existing code from the codebase, use the following format:
+
+````markdown
+```language startLine:endLine:filepath
+// code content
+```
+````
+
+### Required Components
+
+1. **Language Tag**: The programming language identifier (e.g., `dart`, `typescript`, `python`, `javascript`)
+2. **Space**: A single space after the language tag
+3. **Line Range**: Start and end line numbers separated by a colon (e.g., `8:16`)
+4. **File Path**: Relative path from project root (e.g., `lib/get_utils/src/get_utils/get_utils.dart`)
+
+### Format Pattern
+
+````markdown
+```[language] [startLine]:[endLine]:[filepath]
+````
+
+## Rules
+
+### When to Use This Format
+
+- **Always** use this format when referencing existing code from the codebase
+- Use when documenting actual implementation details
+- Use when showing code examples from source files
+- Use when explaining how existing functions, classes, or methods work
+
+### When NOT to Use This Format
+
+- **Do NOT** use this format for new or proposed code that doesn't exist yet
+- **Do NOT** use this format for pseudocode or conceptual examples
+- **Do NOT** use this format for code snippets without specific file references
+
+For new/proposed code, use standard markdown code blocks:
+
+````markdown
+```dart
+// new code example
+```
+````
+
+## Examples
+
+### Correct Usage
+
+**Example 1: Single function reference**
+
+````markdown
+```dart 8:16:lib/get_utils/src/get_utils/get_utils.dart
+bool? _isEmpty(dynamic value) {
+  if (value is String) {
+    return value.toString().trim().isEmpty;
+  }
+  if (value is Iterable || value is Map) {
+    return value.isEmpty as bool?;
+  }
+  return false;
+}
+```
+````
+
+**Example 2: Single line reference**
+
+````markdown
+```dart 63:63:lib/get_utils/src/get_utils/get_utils.dart
+static bool isNull(dynamic value) => value == null;
+```
+````
+
+**Example 3: Multi-line method reference**
+
+````markdown
+```dart 313:321:lib/get_utils/src/get_utils/get_utils.dart
+static bool isLengthGreaterThan(dynamic value, int maxLength) {
+  final length = _obtainDynamicLength(value);
+
+  if (length == null) {
+    return false;
+  }
+
+  return length > maxLength;
+}
+```
+````
+
+**Example 4: TypeScript example**
+
+````markdown
+```typescript 10:25:src/utils/helpers.ts
+export function formatDate(date: Date): string {
+  return date.toISOString().split('T')[0];
+}
+```
+````
+
+**Example 5: Python example**
+
+````markdown
+```python 5:12:utils/validators.py
+def validate_email(email: str) -> bool:
+    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return bool(re.match(pattern, email))
+```
+````
+
+### Incorrect Usage
+
+**❌ Missing language tag**
+
+````markdown
+```8:16:lib/get_utils/src/get_utils/get_utils.dart
+bool? _isEmpty(dynamic value) {
+  // code
+}
+```
+````
+
+**Problem**: No language tag means no syntax highlighting
+
+**❌ Missing space after language tag**
+
+````markdown
+```dart8:16:lib/get_utils/src/get_utils/get_utils.dart
+// code
+```
+````
+
+**Problem**: Missing space between language and line numbers
+
+**❌ Wrong line number format**
+
+````markdown
+```dart 8-16:lib/get_utils/src/get_utils/get_utils.dart
+// code
+```
+````
+
+**Problem**: Should use colon `:` not hyphen `-` for line range
+
+**❌ Absolute file path**
+
+````markdown
+
+```dart 8:16:/home/user/getx/lib/get_utils/src/get_utils/get_utils.dart
+// code
+```
+````
+
+**Problem**: Should use relative path from project root, not absolute path
+
+**❌ Missing file path**
+
+````markdown
+
+```dart 8:16
+// code
+```
+````
+
+**Problem**: File path is required for code references
+
+## Best Practices
+
+### Line Range Selection
+
+1. **Include complete code blocks**: When referencing a function or method, include the entire definition
+   - Good: `8:16:lib/get_utils/src/get_utils/get_utils.dart` (complete function)
+   - Avoid: `8:10:lib/get_utils/src/get_utils/get_utils.dart` (incomplete function)
+
+2. **Add context when helpful**: Include a few lines before/after if it helps understanding
+   - Good: Include comments or related code that provides context
+   - Avoid: Including unrelated code just to show more lines
+
+3. **Single line references**: For very simple one-liners, single line references are acceptable
+   - Good: `63:63:lib/get_utils/src/get_utils/get_utils.dart`
+
+### File Path Conventions
+
+1. **Use relative paths**: Always use paths relative to the project root
+   - Good: `lib/get_utils/src/get_utils/get_utils.dart`
+   - Bad: `/home/user/getx/lib/get_utils/src/get_utils/get_utils.dart`
+   - Bad: `./lib/get_utils/src/get_utils/get_utils.dart`
+
+2. **Use forward slashes**: Use `/` for path separators (works on all platforms)
+   - Good: `lib/utils/helpers.dart`
+   - Bad: `lib\utils\helpers.dart` (Windows-style)
+
+3. **Be specific**: Include the full path from project root
+   - Good: `lib/get_utils/src/get_utils/get_utils.dart`
+   - Avoid: `get_utils.dart` (too ambiguous)
+
+### Language Tag Guidelines
+
+1. **Use correct language identifiers**: Use standard language names
+   - Common languages: `dart`, `typescript`, `javascript`, `python`, `java`, `go`, `rust`, `cpp`, `c`, `csharp`, `php`, `ruby`, `swift`, `kotlin`
+
+2. **Match file extension**: The language tag should match the file type
+   - `.dart` files → `dart`
+   - `.ts` files → `typescript`
+   - `.js` files → `javascript`
+   - `.py` files → `python`
+
+3. **Use lowercase**: Language tags should be lowercase
+   - Good: `dart`, `typescript`, `python`
+   - Bad: `Dart`, `TypeScript`, `Python`
+
+## Common Mistakes to Avoid
+
+1. **Forgetting the space**: Always include a space after the language tag
+   - ❌ ` ```dart8:16:file.dart `
+   - ✅ ` ```dart 8:16:file.dart `
+
+2. **Using wrong separator**: Use colon `:` for line range, not hyphen `-`
+   - ❌ `8-16:file.dart`
+   - ✅ `8:16:file.dart`
+
+3. **Including line numbers in code**: The line numbers go in the code fence, not in the code content
+   - ❌ Including `// Line 8` comments in the code
+   - ✅ Line numbers are only in the fence: ````dart 8:16:file.dart`
+
+4. **Mixing formats**: Don't mix this format with standard code blocks in the same context
+   - If documenting existing code, use the line number format consistently
+   - If showing new code, use standard code blocks
+
+5. **Incorrect line ranges**: Make sure start line ≤ end line
+   - ❌ `16:8:file.dart` (start > end)
+   - ✅ `8:16:file.dart` (start ≤ end)
+
+## Validation Checklist
+
+Before finalizing documentation with code references, verify:
+
+- [ ] All code blocks referencing existing code include a language tag
+- [ ] There is a space after the language tag
+- [ ] Line numbers use colon separator (`startLine:endLine`)
+- [ ] File paths are relative to project root
+- [ ] File paths use forward slashes
+- [ ] Language tag matches the file type
+- [ ] Line ranges are valid (start ≤ end)
+- [ ] Code content matches the referenced lines
+
+## Summary
+
+**Correct Format:**
+
+````markdown
+
+```[language] [startLine]:[endLine]:[relative/file/path]
+````
+
+**Key Points:**
+
+- Language tag + space + line range + file path
+- Use for existing code references only
+- Relative paths from project root
+- Forward slashes for path separators
+- Standard language identifiers in lowercase
