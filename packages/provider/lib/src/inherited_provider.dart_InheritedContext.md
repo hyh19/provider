@@ -12,7 +12,7 @@
 
 ## 类定义
 
-```316:338:lib/src/inherited_provider.dart
+```dart 316:338:lib/src/inherited_provider.dart
 /// A [BuildContext] associated to an [InheritedProvider].
 ///
 /// It an extra [markNeedsNotifyDependents] method and the exposed value.
@@ -60,14 +60,14 @@ abstract class InheritedContext<T> extends BuildContext {
 
 在 `_InheritedProviderScopeElement` 中的实现：
 
-```603:603:lib/src/inherited_provider.dart
+```dart 603:603:lib/src/inherited_provider.dart
   @override
   T get value => _delegateState.value;
 ```
 
 实际的懒加载逻辑在 `_DelegateState` 的子类中实现，例如 `_CreateInheritedProviderState`：
 
-```719:803:lib/src/inherited_provider.dart
+```dart 719:803:lib/src/inherited_provider.dart
   @override
   T get value {
     if (_didInitValue && _initError != null) {
@@ -182,7 +182,7 @@ StartListening<MyModel>((context, value) {
 
 #### 实现细节
 
-```585:592:lib/src/inherited_provider.dart
+```dart 585:592:lib/src/inherited_provider.dart
   @override
   void markNeedsNotifyDependents() {
     if (!_isNotifyDependentsEnabled) {
@@ -196,7 +196,7 @@ StartListening<MyModel>((context, value) {
 
 在 `build` 方法中，如果 `_shouldNotifyDependents` 为 `true`，则会调用 `notifyClients`：
 
-```554:568:lib/src/inherited_provider.dart
+```dart 554:568:lib/src/inherited_provider.dart
   @override
   Widget build() {
     if (widget.owner._lazy == false) {
@@ -246,21 +246,21 @@ StartListening<MyModel>((context, value) {
 
 #### 实现细节
 
-```582:582:lib/src/inherited_provider.dart
+```dart 582:582:lib/src/inherited_provider.dart
   @override
   bool get hasValue => _delegateState.hasValue;
 ```
 
 对于 `_CreateInheritedProviderState`，`hasValue` 的实现：
 
-```906:907:lib/src/inherited_provider.dart
+```dart 906:907:lib/src/inherited_provider.dart
   @override
   bool get hasValue => _didInitValue;
 ```
 
 对于 `_DeferredDelegateState`，`hasValue` 的实现：
 
-```142:143:lib/src/deferred_inherited_provider.dart
+```dart 142:143:lib/src/deferred_inherited_provider.dart
   @override
   bool get hasValue => _hasValue;
 ```
@@ -269,7 +269,7 @@ StartListening<MyModel>((context, value) {
 
 `hasValue` 主要用于 `DeferredStartListening` 回调中，用于区分首次监听和后续的重建：
 
-```102:127:lib/src/deferred_inherited_provider.dart
+```dart 102:127:lib/src/deferred_inherited_provider.dart
     _removeListener ??= delegate.startListening(
       element!,
       setState,
@@ -328,7 +328,7 @@ DeferredStartListening<Stream<int>, int>(
 
 `InheritedContext<T>` 的具体实现是 `_InheritedProviderScopeElement<T>`，它继承自 `InheritedElement` 并实现了 `InheritedContext<T>` 接口：
 
-```372:373:lib/src/inherited_provider.dart
+```dart 372:373:lib/src/inherited_provider.dart
 class _InheritedProviderScopeElement<T> extends InheritedElement
     implements InheritedContext<T> {
 ```
@@ -380,7 +380,7 @@ classDiagram
 
 `StartListening` 是一个回调函数，用于启动对某个对象的监听。它接收 `InheritedContext` 作为第一个参数：
 
-```38:41:lib/src/inherited_provider.dart
+```dart 38:41:lib/src/inherited_provider.dart
 typedef StartListening<T> = VoidCallback Function(
   InheritedContext<T?> element,
   T value,
@@ -408,7 +408,7 @@ Provider<MyChangeNotifier>(
 
 `DeferredStartListening` 是 `StartListening` 的高级版本，用于处理监听对象和暴露对象不同的情况：
 
-```12:17:lib/src/deferred_inherited_provider.dart
+```dart 12:17:lib/src/deferred_inherited_provider.dart
 typedef DeferredStartListening<T, R> = VoidCallback Function(
   InheritedContext<R?> context,
   void Function(R value) setState,
